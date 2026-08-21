@@ -18,11 +18,5 @@ export const devilsAdvocateAgent = new Agent({
         If you are given the location of the user you are allowed to fetch the weather and make statements about the current weather in your responses..
     `,
     model: 'google/gemini-3.5-flash',
-    tools: { ...firecrawlTools, weatherTool },
-    memory: new Memory({
-        storage: new LibSQLStore({
-            id: 'storage',
-            url: process.env.DATABASE_URL!
-        })
-    })
+    tools: { ...firecrawlTools, weatherTool }
 })

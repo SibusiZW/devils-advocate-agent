@@ -1,6 +1,6 @@
 import { Mastra } from "@mastra/core";
-import { agent } from "./agents/agent";
+import { devilsAdvocateAgent } from "./agents/devils-advocate-agent";
 
 export const mastra = new Mastra({
-  agents: { agent }
+  agents: { devilsAdvocateAgent },
 })

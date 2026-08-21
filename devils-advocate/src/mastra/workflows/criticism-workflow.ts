@@ -1,5 +1,6 @@
 import { createStep } from "@mastra/core/workflows";
 import z from "zod";
+import { devilsAdvocateAgent } from "../agents/devils-advocate-agent";
 
 const appprovalStep = createStep({
     id: 'human-approval',
@@ -34,6 +35,38 @@ const appprovalStep = createStep({
         return {
             task: inputData.task,
             userResponse: resumeData.userResponse
+        }
+    }
+});
+
+const executeTaskStep = createStep({
+    id: 'execute-task',
+    description: "Executes a task",
+
+    inputSchema: z.object({
+        task: z.string(),
+        userResponse: z.string()
+    }),
+
+    outputSchema: z.object({
+        task: z.string(),
+        result: z.string()
+    }),
+
+    execute: async ({ inputData }) => {
+        if (inputData.userResponse === 'deny') {
+            return {
+                task: inputData.task,
+                result: "User didn't authorize task execution!!"
+            }
+        }
+
+        const agent = devilsAdvocateAgent;
+        const response = await agent.generate(`Criticize this.. Don't ask any follow-up questions or info: ${inputData.task}`);
+
+        return {
+            task: inputData.task,
+            result: response.text
         }
     }
 })

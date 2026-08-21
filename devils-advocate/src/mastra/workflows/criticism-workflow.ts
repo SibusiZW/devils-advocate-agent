@@ -1,4 +1,4 @@
-import { createStep } from "@mastra/core/workflows";
+import { createStep, createWorkflow } from "@mastra/core/workflows";
 import z from "zod";
 import { devilsAdvocateAgent } from "../agents/devils-advocate-agent";
 
@@ -69,4 +69,21 @@ const executeTaskStep = createStep({
             result: response.text
         }
     }
+});
+
+export const criticismWorkflow = createWorkflow({
+    id: 'criticism-workflow',
+    description: "A workflow for a criticizing an idea",
+
+    inputSchema: z.object({
+        task: z.string()
+    }),
+
+    outputSchema: z.object({
+        task: z.string(),
+        result: z.string()
+    }),
 })
+    .then(appprovalStep)
+    .then(executeTaskStep)
+    .commit()
